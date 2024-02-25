@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ABV Calculator</title>
+    <style>
+        /* Add your CSS styling here */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #e9ecef;
+        }
+        .container {
+            max-width: 400px;
+            margin: 20px auto;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        label {
+            display: block;
+            margin-bottom: .5rem;
+        }
+        input[type='number'],
+        input[type='radio'],
+        button {
+            width: 100%;
+            padding: .375rem .75rem;
+            margin-bottom: .5rem;
+            border: 1px solid #ced4da;
+            border-radius: .25rem;
+        }
+        input[type='radio'] {
+            width: auto;
+        }
+        button {
+            color: white;
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+        .result {
+            background-color: #f8f9fa;
+            padding: .375rem .75rem;
+            margin-top: 1rem;
+            border: 1px solid #ced4da;
+            border-radius: .25rem;
+        }
+        .result p {
+            margin: .5rem 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Alcohol By Volume Calculator</h2>
+        <div class="form-group">
+            <label>Gravity Unit:</label>
+            <label><input type="radio" name="unit" value="sg" checked> SG (1.xxx)</label>
+            <label><input type="radio" name="unit" value="plato"> Plato °P</label>
+        </div>
+        <div class="form-group">
+            <label for="og">Original Gravity (OG):</label>
+            <input type="number" id="og" step="any" required>
+        </div>
+        <div class="form-group">
+            <label for="fg">Final Gravity (FG):</label>
+            <input type="number" id="fg" step="any" required>
+        </div>
+        <div class="form-group">
+            <label>Equation:</label>
+            <label><input type="radio" name="equation" value="standard" checked> Standard</label>
+            <label><input type="radio" name="equation" value="alternate"> Alternate</label>
+        </div>
+        <button type="button" onclick="calculateABV()">Calculate</button>
+        <div class="result" id="results" style="display: none;">
+            <p>Alcohol By Volume: <span id="abv">-</span>%</p>
+            <p>Apparent Attenuation: <span id="attenuation">-</span>%</p>
+            <p>Calories: <span id="calories">-</span> per 12oz bottle</p>
+            <p>Original Gravity: <span id="ogResult">-</span></p>
+            <p>Final Gravity: <span id="fgResult">-</span></p>
+        </div>
+    </div>
+    <script>
+            function calculateABV() {
+            var og = parseFloat(document.getElementById("og").value);
+            var fg = parseFloat(document.getElementById("fg").value);
+            var resultsDiv = document.getElementById("results");
+
+            if (og && fg) {
+                var abv = (og - fg) * 131.25;
+                var attenuation = ((og - fg) / (og - 1)) * 100;
+
+                // For simplicity, we'll use a placeholder for calories calculation
+                var calories = 0; // This will be your formula for calories
+
+                document.getElementById("abv").textContent = abv.toFixed(2);
+                document.getElementById("attenuation").textContent = attenuation.toFixed(1);
+                document.getElementById("calories").textContent = calories.toFixed(1);
+                document.getElementById("ogResult").textContent = og.toFixed(2) + ' °P, '
+                // Continue from the previous snippet
+                document.getElementById("ogResult").textContent = og.toFixed(2) + ' °P, ' + convertToSG(og).toFixed(3);
+                document.getElementById("fgResult").textContent = fg.toFixed(2) + ' °P, ' + convertToSG(fg).toFixed(3);
+
+                // Display the results
+                resultsDiv.style.display = 'block';
+            } else {
+                alert("Please enter both OG and FG values.");
+            }
+        }
+        // Conversion function from Plato to SG (approximation)
+        function convertToSG(plato) {
+            return 1 + (plato / (258.6 - ((plato / 258.2) * 227.1)));
+        }
+
+        // If necessary, implement the alternate calculation here
+        // ...
+    </script>
+</body>
+</html>
